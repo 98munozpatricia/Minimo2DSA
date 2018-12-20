@@ -13,11 +13,11 @@ import retrofit2.http.Path;
 
 public interface APIRest {
     //We specify the url
-    String BASE_URL = "https://do.diba.cat/api/dataset/municipis/format/json/pag-ini/1/pag-fi/11";
+    String BASE_URL = "https://do.diba.cat/api/dataset/municipis/format/json/pag-ini/1/pag-fi/";
 
     //We add the GET method to obtain the cities
-    @GET("{username}")
-    Call<List<Cities>> getCities(@Path("nom") String username);
+    @GET("{idprimer}/municipi_nom")
+    Call<List<Cities>> cities (@Path("idprimer") String idprimer );
 
 
 

@@ -2,67 +2,46 @@ package com.example.patri.minimo2dsa;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Retrofit;
-
-public class Recycler  {
+public class Recycler extends RecyclerView.Adapter<Recycler.ViewHolder> {
 
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
-    private List<Element> elements;
+    private List<Cities> data;
+    private Context context;
 
-    private void getCities() {
-        APIRest apiRest = new APIRest() {
-            @Override
-            public Call<List<Cities>> getCities(String username) {
-                return null;
-            }
-        };
-/*
-        Call<Cities> callCitiesList = dibaAPI.cities("1","11");
-        callCitiesList.enqueue(new Callback<Cities>() {
-            @Override
-            public void onResponse(Call<Cities> call, Response<Cities> response) {
-                int statusCode = response.code();
-                if (response.isSuccessful()) {
-                    Cities cities = response.body();
-                    recyclerView.setAdapter(new
-                            CitiesRecyclerViewAdapter(cities.getElements(), mListener));
-                    showProgress(false);
-                }
-            }
-            @Override
-            public void onFailure(Call<Cities> call, Throwable t) {
-...
-            }
-        });
-
-    public void addFollowers(List<User> followersList) {
-        data.addAll(followersList);
+    public void addCities(List<Cities> citiesList) {
+        data.addAll(citiesList);
         notifyDataSetChanged();
     }
 
     //Asign the text TextView to the text1 in the layout
     public class ViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout linearLayout;
-        private TextView followerNameView;
-        private ImageView photoFollower;
+        private TextView cityNameView;
+        private ImageView photoCity;
 
         public ViewHolder(View v) {
             super(v);
-            followerNameView = v.findViewById(R.id.followerNameView);
-            photoFollower = v.findViewById(R.id.photoFollower);
+            cityNameView = v.findViewById(R.id.followerNameView);
+            photoCity = v.findViewById(R.id.photoFollower);
             linearLayout = v.findViewById(R.id.linearLayout);
         }
     }
@@ -73,22 +52,23 @@ public class Recycler  {
         this.data = new ArrayList<>();
     }
 
+
     @Override
     public Recycler.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_follower, parent, false);
+        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_item, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(Recycler.ViewHolder holder, int position) {
-        User userData = data.get(position);
-        holder.followerNameView.setText(userData.login);
+        Cities cityData = data.get(position);
+        holder.cityNameView.setText(cityData.getNom());
 
-        Picasso.with(context).load(userData.avatar_url).into(holder.photoFollower);
+        Picasso.with(context).load(cityData.getCache()).into(holder.photoCity);
 
         holder.linearLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ProfileFollowerActivity.class);
+            Intent intent = new Intent(context, MainActivity.class);
             TextView editText = v.findViewById(R.id.followerNameView);
             String message = editText.getText().toString();
             intent.putExtra(EXTRA_MESSAGE, message);
@@ -100,8 +80,7 @@ public class Recycler  {
     public int getItemCount() {
         return data.size();
     }
-    */
-    }
-
-
 }
+
+
+
