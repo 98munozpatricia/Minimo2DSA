@@ -27,20 +27,12 @@ import retrofit2.Retrofit;
 
 public class MainActivity extends LoginActivity {
 
-    //Declaar API
+
     private APIRest apirest;
-    //Declarar Retrofit
     private Retrofit retrofit;
-    //Declarar/Crear Recycler
     private Recycler recycler;
     private RecyclerView recyclerView;
-    //Declarar EXTRA MESSAGE
     public String message;
-    //Declarar textview y imageview que aparecen en el layout para pasar valor
-    private TextView numrepostxt;
-    private TextView numfollowstxt;
-    ImageView activityProfileIVInternet;
-    //Declarar spinner de cargando donde estamos esperando los datos
     private ProgressDialog progressDialog;
 
 
@@ -53,23 +45,17 @@ public class MainActivity extends LoginActivity {
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recycler = new Recycler(this);
+
         recyclerView.setAdapter(recycler);
         recyclerView.setHasFixedSize(true);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        Intent intent = getIntent();
-        message = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
 
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Loading...");
-        progressDialog.setMessage("Waiting for the server");
-        progressDialog.setCancelable(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.show();
+
+
+
 
         //Create API
         apirest= APIRest.createAPIRest();
@@ -80,20 +66,14 @@ public class MainActivity extends LoginActivity {
 
     public void getCities() {
 
-        Call<List<Cities>> citiesCall = apirest.cities("11");
-        citiesCall.enqueue(new Callback<List<Cities>>() {
+        Call <Cities> citiesCall = apirest.cities("1","11");
+        citiesCall.enqueue(new Callback<Cities>() {
             @Override
-            public void onResponse(Call<List<Cities>> call, Response<List<Cities>> response) {
+            public void onResponse(Call<Cities> call, Response<Cities> response) {
                 if (response.isSuccessful()){
-                    //Creamos lista ususario con los datos de List<User> response en new lIst (tipo body), y ahí iremos añadiendo los diferentes usuarios con sus datos
-                    List<Cities> newList =response.body();
-                    recycler.addCities(newList);
-                    for(int i = 0; i < newList.size(); i++) {
-                        Log.i("Cities: " + newList.get(i).getNom(), response.message());
-                        Log.i("Size of the list: " +newList.size(), response.message());
-                    }
-                    //Si va bien desaparece progressDialog
-                    progressDialog.hide();
+                    Cities cities = (Cities) response.body();
+                    recyclerView.setAdapter(new Recycler(cities.getElements()));
+
 
                 }
                 else {
@@ -107,17 +87,17 @@ public class MainActivity extends LoginActivity {
                             .setTitle("Error")
                             .setMessage(response.message())
                             .setCancelable(false)
-                            .setPositiveButton("OK", ((dialog, which) -> finish() ));
+                            .setPositiveButton("OK", ((dialog, which) -> finish()));
                     //Crea
-                    android.support.v7.app.AlertDialog alertDialog=alertDialogBuilder.create();
+                    android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
                     //Enseña
                     alertDialog.show();
                 }
+
             }
 
-            //Alert dialog, titulo meensaje, parametros adicionales error servidor
             @Override
-            public void onFailure(Call<List<Cities>> call, Throwable t) {
+            public void onFailure(Call<Cities> call, Throwable t) {
                 Log.e("No api connection", t.getMessage());
 
                 //Alert dialog
@@ -136,6 +116,7 @@ public class MainActivity extends LoginActivity {
 
             }
         });
+
     }
 
 

@@ -22,63 +22,56 @@ import java.util.List;
 
 public class Recycler extends RecyclerView.Adapter<Recycler.ViewHolder> {
 
-    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
-    private List<Cities> data;
+
+    private List<Element> CitiesList;
     private Context context;
 
-    public void addCities(List<Cities> citiesList) {
-        data.addAll(citiesList);
-        notifyDataSetChanged();
-    }
+
 
     //Asign the text TextView to the text1 in the layout
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout linearLayout;
+        private TextView cityIDE;
         private TextView cityNameView;
         private ImageView photoCity;
 
         public ViewHolder(View v) {
             super(v);
             cityNameView = v.findViewById(R.id.followerNameView);
-            photoCity = v.findViewById(R.id.photoFollower);
-            linearLayout = v.findViewById(R.id.linearLayout);
+            photoCity = v.findViewById(R.id.escudo);
+            cityIDE = v.findViewById(R.id.ide_view);
+
         }
     }
 
     //Constructor
-    public Recycler(Context context) {
-        this.context = context;
-        this.data = new ArrayList<>();
+    public Recycler(List<Element> list) {
+        CitiesList=list;
     }
 
 
     @Override
     public Recycler.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
+        context=parent.getContext();
         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_item, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(Recycler.ViewHolder holder, int position) {
-        Cities cityData = data.get(position);
-        holder.cityNameView.setText(cityData.getNom());
 
-        Picasso.with(context).load(cityData.getCache()).into(holder.photoCity);
+        Element element = CitiesList.get(position);
+        holder.cityNameView.setText(element.getMunicipiNom());
+        holder.cityIDE.setText(element.getIne());
+        Picasso.with(context).load(element.getMunicipiEscut()).into(holder.photoCity);
 
-        holder.linearLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(context, MainActivity.class);
-            TextView editText = v.findViewById(R.id.followerNameView);
-            String message = editText.getText().toString();
-            intent.putExtra(EXTRA_MESSAGE, message);
-            context.startActivity(intent);
-        });
+
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return CitiesList.size();
     }
 }
 

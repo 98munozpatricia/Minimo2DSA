@@ -16,14 +16,13 @@ public interface APIRest {
     String BASE_URL = "https://do.diba.cat/api/dataset/municipis/format/json/pag-ini/1/pag-fi/";
 
     //We add the GET method to obtain the cities
-    @GET("{idprimer}/municipi_nom")
-    Call<List<Cities>> cities (@Path("idprimer") String idprimer );
+    @GET("pag-ini/{n1}/pag-fi/{n2}")
+    Call<Cities> cities (@Path("n1") String n1 , @Path("n2") String n2  );
 
 
 
     static APIRest createAPIRest() {
         Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
